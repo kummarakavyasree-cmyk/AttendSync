@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AttendSync - Smart Attendance Management</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            min-height: 600px;
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            display: flex;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+
+        /* LEFT SIDE */
+
+        .left {
+            width: 45%;
+            background: linear-gradient(160deg, #667eea, #6c5ce7);
+            color: white;
+            padding: 55px 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .tagline {
+            font-size: 30px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            font-size: 15px;
+            line-height: 1.7;
+            opacity: 0.9;
+        }
+
+        .features {
+            margin-top: 35px;
+        }
+
+        .feature {
+            margin: 15px 0;
+            font-size: 15px;
+        }
+
+        /* RIGHT SIDE */
+
+        .right {
+            width: 55%;
+            padding: 45px 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #777;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        /* ROLE */
+
+        .role-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .role {
+            flex: 1;
+            padding: 13px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: #555;
+            transition: 0.3s;
+        }
+
+        .role:hover {
+            border-color: #667eea;
+        }
+
+        .role.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* FORM */
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 7px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            outline: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+
+        .button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: 0.3s;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102,126,234,0.3);
+        }
+
+        .switch {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .switch span {
+            color: #667eea;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: 600;
+            min-height: 20px;
+        }
+
+        .success {
+            color: #16a085;
+        }
+
+        .error {
+            color: #e74c3c;
+        }
+
+        .register-info {
+            background: #f5f6ff;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 800px) {
+
+            .container {
+                flex-direction: column;
+            }
+
+            .left {
+                width: 100%;
+                padding: 35px;
+            }
+
+            .right {
+                width: 100%;
+                padding: 35px;
+            }
+
+            .tagline {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LEFT -->
+
+    <div class="left">
+
+        <div class="logo">📚 AttendSync</div>
+
+        <div class="tagline">
+            Attendance made smarter.
+        </div>
+
+        <div class="description">
+            A smart college attendance management system
+            that makes attendance simple, transparent and accessible.
+        </div>
+
+        <div class="features">
+
+            <div class="feature">✅ Easy Attendance Management</div>
+
+            <div class="feature">📊 Smart Attendance Reports</div>
+
+            <div class="feature">👨‍🎓 Student Attendance Tracking</div>
+
+            <div class="feature">👨‍🏫 Faculty Attendance Control</div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RIGHT -->
+
+    <div class="right">
+
+        <div class="title" id="formTitle">
+            Welcome Back 👋
+        </div>
+
+        <div class="subtitle" id="formSubtitle">
+            Login to continue to AttendSync
+        </div>
+
+
+        <!-- ROLE -->
+
+        <div class="role-container">
+
+            <div class="role active" id="studentRole"
+                 onclick="selectRole('student')">
+                👨‍🎓 Student
+            </div>
+
+            <div class="role" id="facultyRole"
+                 onclick="selectRole('faculty')">
+                👨‍🏫 Faculty
+            </div>
+
+        </div>
+
+
+        <!-- LOGIN FORM -->
+
+        <div id="loginForm">
+
+            <div class="form-group">
+
+                <label>Registration Number</label>
+
+                <input
+                    type="text"
+                    id="loginId"
+                    placeholder="Enter your registration number"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Password</label>
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Enter your password"
+                >
+
+            </div>
+
+
+            <button class="button" onclick="login()">
+                Login
+            </button>
+
+
+            <div class="message" id="loginMessage"></div>
+
+
+            <div class="switch">
+
+                New to AttendSync?
+
+                <span onclick="showRegister()">
+                    Create Account
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- REGISTER FORM -->
+
+        <div id="registerForm" style="display:none;">
+
+            <div class="register-info">
+
+                📝 Create your AttendSync account using your
+                own registration number and password.
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Full Name</label>
+
+                <input
+                    type="text"
+                    id="registerName"
+                    placeholder="Enter your full name"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Registration Number</label>
+
+                <input
+                    type="text"
+                    id="registerId"
+                    placeholder="Enter your registration number"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Create Password</label>
+
+                <input
+                    type="password"
+                    id="registerPassword"
+                    placeholder="Create a password"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Confirm Password</label>
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Confirm your password"
+                >
+
+            </div>
+
+
+            <button class="button" onclick="registerUser()">
+                Create Account
+            </button>
+
+
+            <div class="message" id="registerMessage"></div>
+
+
+            <div class="switch">
+
+                Already have an account?
+
+                <span onclick="showLogin()">
+                    Login
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    let selectedRole = "student";
+
+
+    /* ROLE SELECTION */
+
+    function selectRole(role) {
+
+        selectedRole = role;
+
+        document.getElementById("studentRole")
+            .classList.remove("active");
+
+        document.getElementById("facultyRole")
+            .classList.remove("active");
+
+
+        if (role === "student") {
+
+            document.getElementById("studentRole")
+                .classList.add("active");
+
+        } else {
+
+            document.getElementById("facultyRole")
+                .classList.add("active");
+
+        }
+
+    }
+
+
+    /* SHOW REGISTER */
+
+    function showRegister() {
+
+        document.getElementById("loginForm")
+            .style.display = "none";
+
+        document.getElementById("registerForm")
+            .style.display = "block";
+
+
+        document.getElementById("formTitle")
+            .innerText = "Create Account ✨";
+
+        document.getElementById("formSubtitle")
+            .innerText = "Register to use AttendSync";
+
+    }
+
+
+    /* SHOW LOGIN */
+
+    function showLogin() {
+
+        document.getElementById("registerForm")
+            .style.display = "none";
+
+        document.getElementById("loginForm")
+            .style.display = "block";
+
+
+        document.getElementById("formTitle")
+            .innerText = "Welcome Back 👋";
+
+        document.getElementById("formSubtitle")
+            .innerText = "Login to continue to AttendSync";
+
+    }
+
+
+    /* REGISTER */
+
+    function registerUser() {
+
+        const name =
+            document.getElementById("registerName").value.trim();
+
+        const id =
+            document.getElementById("registerId").value.trim();
+
+        const password =
+            document.getElementById("registerPassword").value;
+
+        const confirmPassword =
+            document.getElementById("confirmPassword").value;
+
+        const message =
+            document.getElementById("registerMessage");
+
+
+        if (!name || !id || !password || !confirmPassword) {
+
+            message.innerText =
+                "Please fill all the fields.";
+
+            message.className = "message error";
+
+            return;
+        }
+
+
+        if (password !== confirmPassword) {
+
+            message.innerText =
+                "Passwords do not match.";
+
+            message.className = "message error";
+
+            return;
+        }
+
+
+        /* GET EXISTING USERS */
+
+        let users =
+            JSON.parse(localStorage.getItem("attendsyncUsers")) || [];
+
+
+        /* CHECK DUPLICATE ID */
+
+        const existingUser =
+            users.find(user =>
+                user.id.toLowerCase() === id.toLowerCase()
+            );
+
+
+        if (existingUser) {
+
+            message.innerText =
+                "This registration number is already registered.";
+
+            message.className = "message error";
+
+            return;
+        }
+
+
+        /* CREATE USER */
+
+        const newUser = {
+
+            name: name,
+
+            id: id,
+
+            password: password,
+
+            role: selectedRole
+
+        };
+
+
+        users.push(newUser);
+
+
+        localStorage.setItem(
+            "attendsyncUsers",
+            JSON.stringify(users)
+        );
+
+
+        message.innerText =
+            "Account created successfully! 🎉";
+
+        message.className = "message success";
+
+
+        /* CLEAR FORM */
+
+        document.getElementById("registerName").value = "";
+
+        document.getElementById("registerId").value = "";
+
+        document.getElementById("registerPassword").value = "";
+
+        document.getElementById("confirmPassword").value = "";
+
+
+        setTimeout(() => {
+
+            showLogin();
+
+        }, 1200);
+
+    }
+
+
+    /* LOGIN */
+
+    function login() {
+
+        const id =
+            document.getElementById("loginId").value.trim();
+
+        const password =
+            document.getElementById("loginPassword").value;
+
+        const message =
+            document.getElementById("loginMessage");
+
+
+        if (!id || !password) {
+
+            message.innerText =
+                "Please enter your registration number and password.";
+
+            message.className = "message error";
+
+            return;
+        }
+
+
+        /* GET USERS */
+
+        let users =
+            JSON.parse(localStorage.getItem("attendsyncUsers")) || [];
+
+
+        /* FIND USER */
+
+        const user =
+            users.find(u =>
+                u.id.toLowerCase() === id.toLowerCase() &&
+                u.password === password &&
+                u.role === selectedRole
+            );
+
+
+        if (!user) {
+
+            message.innerText =
+                "Invalid registration number, password or role.";
+
+            message.className = "message error";
+
+            return;
+        }
+
+
+        /* SAVE LOGGED-IN USER */
+
+        localStorage.setItem(
+            "loggedInUser",
+            JSON.stringify(user)
+        );
+
+
+        message.innerText =
+            "Login successful! Welcome " + user.name + " 🎉";
+
+        message.className = "message success";
+
+
+        /* OPEN DASHBOARD */
+
+        setTimeout(() => {
+
+            if (selectedRole === "student") {
+
+                window.location.href =
+                    "student-dashboard.html";
+
+            } else {
+
+                window.location.href =
+                    "faculty-dashboard.html";
+
+            }
+
+        }, 1000);
+
+    }
+
+</script>
+
+</body>
+</html>

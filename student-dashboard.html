@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AttendSync - Student Dashboard</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",Arial,sans-serif;
+}
+
+body{
+    background:#f5f7fb;
+    color:#252b42;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:250px;
+    height:100vh;
+    background:linear-gradient(180deg,#5b5ce2,#7646c9);
+    color:white;
+    padding:25px 18px;
+    z-index:1000;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:800;
+    padding:10px 12px 30px;
+}
+
+.logo span{
+    font-size:28px;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.menu-item{
+    padding:14px 15px;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:15px;
+    transition:0.25s;
+}
+
+.menu-item:hover{
+    background:rgba(255,255,255,0.15);
+}
+
+.menu-item.active{
+    background:white;
+    color:#5b5ce2;
+    font-weight:700;
+}
+
+.logout{
+    position:absolute;
+    bottom:25px;
+    left:18px;
+    right:18px;
+}
+
+/* MAIN */
+
+.main{
+    margin-left:250px;
+    min-height:100vh;
+    padding:30px 35px;
+}
+
+/* TOPBAR */
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.welcome h1{
+    font-size:28px;
+    margin-bottom:5px;
+}
+
+.welcome p{
+    color:#7b8196;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.profile-icon{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:#e5e6ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+}
+
+.profile-name{
+    font-weight:700;
+}
+
+.profile-role{
+    font-size:12px;
+    color:#888;
+}
+
+/* SECTIONS */
+
+.page-section{
+    display:none;
+}
+
+.page-section.active-section{
+    display:block;
+}
+
+/* CARDS */
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:22px;
+    box-shadow:0 5px 20px rgba(40,45,70,0.07);
+}
+
+.stat-card{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.stat-icon{
+    width:50px;
+    height:50px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    background:#eeeefe;
+}
+
+.stat-card h2{
+    font-size:25px;
+}
+
+.stat-card p{
+    color:#888;
+    font-size:13px;
+}
+
+/* ATTENDANCE */
+
+.overall-card{
+    margin-bottom:25px;
+}
+
+.section-title{
+    font-size:20px;
+    margin-bottom:18px;
+}
+
+.overall-content{
+    display:flex;
+    align-items:center;
+    gap:35px;
+}
+
+.circle{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    background:conic-gradient(#625eea 0deg 306deg,#e9e9f4 306deg 360deg);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.circle-inner{
+    width:92px;
+    height:92px;
+    border-radius:50%;
+    background:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:27px;
+    font-weight:800;
+    color:#5b5ce2;
+}
+
+.overall-info h3{
+    font-size:20px;
+    margin-bottom:7px;
+}
+
+.overall-info p{
+    color:#777;
+    font-size:14px;
+}
+
+/* SUBJECTS */
+
+.subject-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+.subject-card{
+    background:white;
+    padding:20px;
+    border-radius:17px;
+    box-shadow:0 5px 18px rgba(40,45,70,0.06);
+}
+
+.subject-top{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:12px;
+}
+
+.subject-name{
+    font-weight:700;
+}
+
+.percentage{
+    font-weight:800;
+    color:#5b5ce2;
+}
+
+.progress{
+    width:100%;
+    height:9px;
+    background:#ededf5;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    background:linear-gradient(90deg,#625eea,#8a55d4);
+    border-radius:10px;
+}
+
+.subject-details{
+    margin-top:10px;
+    color:#888;
+    font-size:13px;
+}
+
+/* TABLE */
+
+.table-card{
+    background:white;
+    border-radius:18px;
+    padding:22px;
+    box-shadow:0 5px 20px rgba(40,45,70,0.07);
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:15px;
+    text-align:left;
+    border-bottom:1px solid #eeeeF4;
+}
+
+th{
+    color:#777;
+    font-size:13px;
+}
+
+td{
+    font-size:14px;
+}
+
+.present{
+    color:#159570;
+    background:#e5f8f1;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:700;
+}
+
+.absent{
+    color:#d94b58;
+    background:#ffe8eb;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:700;
+}
+
+/* NOTIFICATIONS */
+
+.notification{
+    background:white;
+    padding:18px;
+    border-radius:15px;
+    margin-bottom:15px;
+    display:flex;
+    gap:15px;
+    box-shadow:0 4px 15px rgba(40,45,70,0.05);
+}
+
+.notification-icon{
+    font-size:24px;
+}
+
+.notification h3{
+    font-size:15px;
+    margin-bottom:5px;
+}
+
+.notification p{
+    font-size:13px;
+    color:#777;
+}
+
+/* BACK BUTTON */
+
+.back-btn{
+    border:none;
+    background:white;
+    padding:10px 18px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:600;
+    color:#5b5ce2;
+    box-shadow:0 3px 12px rgba(0,0,0,0.07);
+    margin-bottom:20px;
+}
+
+.back-btn:hover{
+    background:#f0efff;
+}
+
+/* MOBILE */
+
+@media(max-width:1000px){
+
+    .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:700px){
+
+    .sidebar{
+        width:210px;
+    }
+
+    .main{
+        margin-left:210px;
+        padding:20px;
+    }
+
+    .stats-grid{
+        grid-template-columns:1fr;
+    }
+
+    .subject-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        📚 AttendSync
+    </div>
+
+    <div class="menu">
+
+        <div class="menu-item active"
+             onclick="showSection('dashboard',this)">
+            🏠 Dashboard
+        </div>
+
+        <div class="menu-item"
+             onclick="showSection('attendance',this)">
+            📊 My Attendance
+        </div>
+
+        <div class="menu-item"
+             onclick="showSection('subjects',this)">
+            📚 Subjects
+        </div>
+
+        <div class="menu-item"
+             onclick="showSection('schedule',this)">
+            🗓️ Class Schedule
+        </div>
+
+        <div class="menu-item"
+             onclick="showSection('notifications',this)">
+            🔔 Notifications
+        </div>
+
+    </div>
+
+    <div class="menu-item logout"
+         onclick="logout()">
+        🚪 Logout
+    </div>
+
+</div>
+
+
+<!-- MAIN -->
+
+<div class="main">
+
+    <!-- TOP BAR -->
+
+    <div class="topbar">
+
+        <div class="welcome">
+
+            <h1 id="welcomeName">
+                Good Morning 👋
+            </h1>
+
+            <p>
+                Here's your attendance overview.
+            </p>
+
+        </div>
+
+
+        <div class="profile">
+
+            <div class="profile-icon">
+                👩‍🎓
+            </div>
+
+            <div>
+
+                <div class="profile-name"
+                     id="profileName">
+                    Student
+                </div>
+
+                <div class="profile-role">
+                    Student
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- DASHBOARD -->
+
+    <section id="dashboard"
+             class="page-section active-section">
+
+        <div class="stats-grid">
+
+            <div class="card stat-card">
+
+                <div class="stat-icon">
+                    📚
+                </div>
+
+                <div>
+                    <h2>130</h2>
+                    <p>Total Classes</p>
+                </div>
+
+            </div>
+
+
+            <div class="card stat-card">
+
+                <div class="stat-icon">
+                    ✅
+                </div>
+
+                <div>
+                    <h2>111</h2>
+                    <p>Classes Attended</p>
+                </div>
+
+            </div>
+
+
+            <div class="card stat-card">
+
+                <div class="stat-icon">
+                    ❌
+                </div>
+
+                <div>
+                    <h2>19</h2>
+                    <p>Classes Absent</p>
+                </div>
+
+            </div>
+
+
+            <div class="card stat-card">
+
+                <div class="stat-icon">
+                    📈
+                </div>
+
+                <div>
+                    <h2>85%</h2>
+                    <p>Overall Attendance</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card overall-card">
+
+            <h2 class="section-title">
+                Overall Attendance
+            </h2>
+
+            <div class="overall-content">
+
+                <div class="circle">
+
+                    <div class="circle-inner">
+                        85%
+                    </div>
+
+                </div>
+
+                <div class="overall-info">
+
+                    <h3>Good Attendance 👍</h3>
+
+                    <p>
+                        You are above the minimum attendance
+                        requirement of 75%.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <h2 class="section-title">
+            Subject-wise Attendance
+        </h2>
+
+        <div class="subject-grid">
+
+            <div class="subject-card">
+
+                <div class="subject-top">
+                    <span class="subject-name">JAVA</span>
+                    <span class="percentage">87%</span>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar"
+                         style="width:87%">
+                    </div>
+                </div>
+
+                <div class="subject-details">
+                    26 attended / 30 classes
+                </div>
+
+            </div>
+
+
+            <div class="subject-card">
+
+                <div class="subject-top">
+                    <span class="subject-name">ADSA</span>
+                    <span class="percentage">82%</span>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar"
+                         style="width:82%">
+                    </div>
+                </div>
+
+                <div class="subject-details">
+                    23 attended / 28 classes
+                </div>
+
+            </div>
+
+
+            <div class="subject-card">
+
+                <div class="subject-top">
+                    <span class="subject-name">DLCO</span>
+                    <span class="percentage">84%</span>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar"
+                         style="width:84%">
+                    </div>
+                </div>
+
+                <div class="subject-details">
+                    21 attended / 25 classes
+                </div>
+
+            </div>
+
+
+            <div class="subject-card">
+
+                <div class="subject-top">
+                    <span class="subject-name">DMGT</span>
+                    <span class="percentage">81%</span>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar"
+                         style="width:81%">
+                    </div>
+                </div>
+
+                <div class="subject-details">
+                    22 attended / 27 classes
+                </div>
+
+            </div>
+
+
+            <div class="subject-card">
+
+                <div class="subject-top">
+                    <span class="subject-name">UHV</span>
+                    <span class="percentage">95%</span>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar"
+                         style="width:95%">
+                    </div>
+                </div>
+
+                <div class="subject-details">
+                    19 attended / 20 classes
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- MY ATTENDANCE -->
+
+    <section id="attendance"
+             class="page-section">
+
+        <button class="back-btn"
+                onclick="goBack()">
+            ← Back
+        </button>
+
+        <h2 class="section-title">
+            📊 My Attendance
+        </h2>
+
+        <div class="table-card">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Date</th>
+                        <th>Subject</th>
+                        <th>Class</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>13 Sep 2026</td>
+                        <td>JAVA</td>
+                        <td>Morning</td>
+                        <td>
+                            <span class="present">
+                                Present
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>13 Sep 2026</td>
+                        <td>ADSA</td>
+                        <td>Morning</td>
+                        <td>
+                            <span class="absent">
+                                Absent
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>12 Sep 2026</td>
+                        <td>DLCO</td>
+                        <td>Afternoon</td>
+                        <td>
+                            <span class="present">
+                                Present
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>12 Sep 2026</td>
+                        <td>DMGT</td>
+                        <td>Afternoon</td>
+                        <td>
+                            <span class="present">
+                                Present
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>11 Sep 2026</td>
+                        <td>UHV</td>
+                        <td>Morning</td>
+                        <td>
+                            <span class="present">
+                                Present
+                            </span>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- SUBJECTS -->
+
+    <section id="subjects"
+             class="page-section">
+
+        <button class="back-btn"
+                onclick="goBack()">
+            ← Back
+        </button>
+
+        <h2 class="section-title">
+            📚 My Subjects
+        </h2>
+
+        <div class="subject-grid">
+
+            <div class="subject-card">
+                <div class="subject-top">
+                    <span class="subject-name">JAVA</span>
+                    <span class="percentage">87%</span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar"
+                         style="width:87%">
+                    </div>
+                </div>
+                <div class="subject-details">
+                    26 / 30 classes attended
+                </div>
+            </div>
+
+
+            <div class="subject-card">
+                <div class="subject-top">
+                    <span class="subject-name">ADSA</span>
+                    <span class="percentage">82%</span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar"
+                         style="width:82%">
+                    </div>
+                </div>
+                <div class="subject-details">
+                    23 / 28 classes attended
+                </div>
+            </div>
+
+
+            <div class="subject-card">
+                <div class="subject-top">
+                    <span class="subject-name">DLCO</span>
+                    <span class="percentage">84%</span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar"
+                         style="width:84%">
+                    </div>
+                </div>
+                <div class="subject-details">
+                    21 / 25 classes attended
+                </div>
+            </div>
+
+
+            <div class="subject-card">
+                <div class="subject-top">
+                    <span class="subject-name">DMGT</span>
+                    <span class="percentage">81%</span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar"
+                         style="width:81%">
+                    </div>
+                </div>
+                <div class="subject-details">
+                    22 / 27 classes attended
+                </div>
+            </div>
+
+
+            <div class="subject-card">
+                <div class="subject-top">
+                    <span class="subject-name">UHV</span>
+                    <span class="percentage">95%</span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar"
+                         style="width:95%">
+                    </div>
+                </div>
+                <div class="subject-details">
+                    19 / 20 classes attended
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SCHEDULE -->
+
+    <section id="schedule"
+             class="page-section">
+
+        <button class="back-btn"
+                onclick="goBack()">
+            ← Back
+        </button>
+
+        <h2 class="section-title">
+            🗓️ Class Schedule
+        </h2>
+
+        <div class="table-card">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Time</th>
+                        <th>Subject</th>
+                        <th>Faculty</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>09:00 - 10:00</td>
+                        <td>JAVA</td>
+                        <td>Faculty</td>
+                        <td>
+                            <span class="present">Present</span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>10:00 - 11:00</td>
+                        <td>ADSA</td>
+                        <td>Faculty</td>
+                        <td>
+                            <span class="absent">Absent</span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>11:30 - 12:30</td>
+                        <td>DLCO</td>
+                        <td>Faculty</td>
+                        <td>
+                            <span class="present">Present</span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>01:30 - 02:30</td>
+                        <td>DMGT</td>
+                        <td>Faculty</td>
+                        <td>
+                            <span class="present">Present</span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>02:30 - 03:30</td>
+                        <td>UHV</td>
+                        <td>Faculty</td>
+                        <td>
+                            <span class="present">Present</span>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- NOTIFICATIONS -->
+
+    <section id="notifications"
+             class="page-section">
+
+        <button class="back-btn"
+                onclick="goBack()">
+            ← Back
+        </button>
+
+        <h2 class="section-title">
+            🔔 Notifications
+        </h2>
+
+
+        <div class="notification">
+
+            <div class="notification-icon">
+                ⚠️
+            </div>
+
+            <div>
+
+                <h3>ADSA Attendance Alert</h3>
+
+                <p>
+                    Your ADSA attendance is currently 82%.
+                    Keep attending classes regularly.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="notification">
+
+            <div class="notification-icon">
+                ⚠️
+            </div>
+
+            <div>
+
+                <h3>DMGT Attendance Alert</h3>
+
+                <p>
+                    Your DMGT attendance is currently 81%.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="notification">
+
+            <div class="notification-icon">
+                🎉
+            </div>
+
+            <div>
+
+                <h3>Good Attendance</h3>
+
+                <p>
+                    Your overall attendance is 85%.
+                    Keep it up!
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+/* GET LOGGED-IN USER */
+
+const loggedInUser =
+    JSON.parse(localStorage.getItem("loggedInUser"));
+
+
+/* SHOW USER NAME */
+
+if(loggedInUser){
+
+    document.getElementById("welcomeName").innerText =
+        "Good Morning, " + loggedInUser.name + " 👋";
+
+    document.getElementById("profileName").innerText =
+        loggedInUser.name;
+
+}
+
+
+/* SHOW SECTION */
+
+function showSection(sectionId, clickedItem){
+
+    document.querySelectorAll(".page-section")
+        .forEach(section => {
+            section.classList.remove("active-section");
+        });
+
+
+    document.getElementById(sectionId)
+        .classList.add("active-section");
+
+
+    document.querySelectorAll(".menu-item")
+        .forEach(item => {
+            item.classList.remove("active");
+        });
+
+
+    if(clickedItem){
+        clickedItem.classList.add("active");
+    }
+
+}
+
+
+/* BACK */
+
+function goBack(){
+
+    showSection("dashboard");
+
+    document.querySelectorAll(".menu-item")
+        .forEach(item => {
+            item.classList.remove("active");
+        });
+
+    document.querySelector(".menu-item")
+        .classList.add("active");
+
+}
+
+
+/* LOGOUT */
+
+function logout(){
+
+    localStorage.removeItem("loggedInUser");
+
+    window.location.href = "index.html";
+
+}
+/* ================= LIVE FACULTY ATTENDANCE ================= */
+
+function loadStudentAttendance() {
+
+    const loggedInUser =
+        JSON.parse(localStorage.getItem("loggedInUser"));
+
+    if (!loggedInUser) return;
+
+    const studentRoll =
+        String(loggedInUser.id).trim();
+
+    const records =
+        JSON.parse(
+            localStorage.getItem("attendsyncAttendance")
+        ) || [];
+
+    let totalClasses = 0;
+    let attendedClasses = 0;
+    let absentClasses = 0;
+
+    const subjectData = {
+        JAVA: { total: 0, present: 0 },
+        ADSA: { total: 0, present: 0 },
+        DLCO: { total: 0, present: 0 },
+        DMGT: { total: 0, present: 0 },
+        UHV: { total: 0, present: 0 }
+    };
+
+
+    records.forEach(record => {
+
+        const student =
+            record.students.find(
+                s => String(s.rollNo).trim() === studentRoll
+            );
+
+        if (!student) return;
+
+        if (
+            student.status !== "present" &&
+            student.status !== "absent"
+        ) {
+            return;
+        }
+
+        totalClasses++;
+
+        if (student.status === "present") {
+            attendedClasses++;
+        } else {
+            absentClasses++;
+        }
+
+
+        if (subjectData[record.subject]) {
+
+            subjectData[record.subject].total++;
+
+            if (student.status === "present") {
+                subjectData[record.subject].present++;
+            }
+
+        }
+
+    });
+
+
+    const overall =
+        totalClasses > 0
+        ? Math.round(
+            (attendedClasses / totalClasses) * 100
+          )
+        : 0;
+
+
+    console.log("Student Attendance:", {
+        studentRoll,
+        totalClasses,
+        attendedClasses,
+        absentClasses,
+        overall
+    });
+
+
+    /*
+       This creates a live attendance summary
+       from Faculty attendance records.
+    */
+
+    let liveBox =
+        document.getElementById("liveAttendanceBox");
+
+
+    if (!liveBox) {
+
+        liveBox =
+            document.createElement("div");
+
+        liveBox.id = "liveAttendanceBox";
+
+        liveBox.style.cssText = `
+            background:white;
+            padding:25px;
+            margin:25px 0;
+            border-radius:18px;
+            box-shadow:0 5px 20px rgba(50,50,93,0.08);
+        `;
+
+        const main =
+            document.querySelector(".main");
+
+        if (main) {
+            main.appendChild(liveBox);
+        }
+
+    }
+
+
+    let subjectHTML = "";
+
+
+    Object.keys(subjectData).forEach(subject => {
+
+        const data = subjectData[subject];
+
+        const percentage =
+            data.total > 0
+            ? Math.round(
+                (data.present / data.total) * 100
+              )
+            : 0;
+
+
+        subjectHTML += `
+
+            <div style="
+                padding:12px 0;
+                border-bottom:1px solid #eee;
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+            ">
+
+                <strong>${subject}</strong>
+
+                <span style="color:#6c4df6;font-weight:700;">
+                    ${data.present}/${data.total}
+                    &nbsp; (${percentage}%)
+                </span>
+
+            </div>
+
+        `;
+
+    });
+
+
+    liveBox.innerHTML = `
+
+        <h2 style="margin-bottom:8px;">
+            📊 Live Attendance
+        </h2>
+
+        <p style="
+            color:#777;
+            font-size:13px;
+            margin-bottom:20px;
+        ">
+            Attendance updated from faculty records
+        </p>
+
+
+        <div style="
+            display:grid;
+            grid-template-columns:
+                repeat(4,1fr);
+            gap:15px;
+            margin-bottom:25px;
+        ">
+
+            <div style="
+                background:#f3efff;
+                padding:18px;
+                border-radius:12px;
+            ">
+                <strong style="font-size:24px;">
+                    ${overall}%
+                </strong>
+                <p style="color:#777;font-size:12px;">
+                    Overall
+                </p>
+            </div>
+
+
+            <div style="
+                background:#eefaf3;
+                padding:18px;
+                border-radius:12px;
+            ">
+                <strong style="font-size:24px;">
+                    ${totalClasses}
+                </strong>
+                <p style="color:#777;font-size:12px;">
+                    Total Classes
+                </p>
+            </div>
+
+
+            <div style="
+                background:#eef5ff;
+                padding:18px;
+                border-radius:12px;
+            ">
+                <strong style="font-size:24px;">
+                    ${attendedClasses}
+                </strong>
+                <p style="color:#777;font-size:12px;">
+                    Present
+                </p>
+            </div>
+
+
+            <div style="
+                background:#fff0f0;
+                padding:18px;
+                border-radius:12px;
+            ">
+                <strong style="font-size:24px;">
+                    ${absentClasses}
+                </strong>
+                <p style="color:#777;font-size:12px;">
+                    Absent
+                </p>
+            </div>
+
+        </div>
+
+
+        <h3 style="margin-bottom:10px;">
+            📚 Subject-wise Attendance
+        </h3>
+
+        ${subjectHTML}
+
+    `;
+
+}
+
+
+/* Load attendance when page opens */
+
+loadStudentAttendance();
+</script>
+
+</body>
+</html>
